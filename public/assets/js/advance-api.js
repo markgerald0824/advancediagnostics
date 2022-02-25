@@ -1,6 +1,6 @@
 ( function( $ ) {
   const publicData = {
-    devMode: false,
+    sandBox: true,
     apiUrl: "",
     fileName: "advance-api.js",
     businessVerified: false,
@@ -26,7 +26,7 @@
      */
     setUrl: function() {
       const tail = "api/v1/validate-id"
-      if ( publicData.devMode ) {
+      if ( publicData.sandBox ) {
         publicData.apiUrl = `https://f69d-2405-8d40-cf0-94c1-a156-7cb4-f13c-380d.ngrok.io/${tail}`
       } else {
         publicData.apiUrl = `https://advancediagnostics.herokuapp.com/${tail}`
