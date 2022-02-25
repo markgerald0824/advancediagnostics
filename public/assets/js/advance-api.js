@@ -1,6 +1,6 @@
 ( function( $ ) {
   const publicData = {
-    devMode: true,
+    devMode: false,
     apiUrl: "",
     fileName: "advance-api.js",
     businessVerified: false,
@@ -25,10 +25,11 @@
      * @description Set the API URL if dev mod
      */
     setUrl: function() {
+      const tail = "api/v1/validate-id"
       if ( publicData.devMode ) {
-        publicData.apiUrl = "https://f69d-2405-8d40-cf0-94c1-a156-7cb4-f13c-380d.ngrok.io/api/v1/validate-id"
+        publicData.apiUrl = `https://f69d-2405-8d40-cf0-94c1-a156-7cb4-f13c-380d.ngrok.io/${tail}`
       } else {
-        publicData.apiUrl = ""
+        publicData.apiUrl = `https://advancediagnostics.herokuapp.com/${tail}`
       }
     },
 
@@ -93,6 +94,12 @@
         body: JSON.stringify( { id:id  } )
       } ).then( r => r.json() ).then( res => {
         console.log( res )
+        config.closeLoading()
+        Swal.fire({
+          icon: 'info',
+          title: 'API Request',
+          text: 'External API On-Development'
+        })
       } )
     },
 
