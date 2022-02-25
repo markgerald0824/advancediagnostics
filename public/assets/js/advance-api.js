@@ -100,7 +100,7 @@
 
         Swal.fire({
           icon: 'info',
-          title: 'API Request',
+          title: 'Sandbox: API Request',
           text: `Status: ${status} -- Message: ${message}`
         })
       } )
