@@ -95,10 +95,13 @@
       } ).then( r => r.json() ).then( res => {
         console.log( res )
         config.closeLoading()
+        const status = res.data.api_status
+        const message = res.data.api_message
+
         Swal.fire({
           icon: 'info',
           title: 'API Request',
-          text: 'External API On-Development'
+          text: `Status: ${status} -- Message: ${message}`
         })
       } )
     },
