@@ -1,6 +1,6 @@
 ( function( $ ) {
   const publicData = {
-    sandBox: true,
+    devMode: true,
     apiUrl: "",
     fileName: "advance-api.js",
     businessVerified: false,
@@ -26,8 +26,8 @@
      */
     setUrl: function() {
       const tail = "api/v1/validate-id"
-      if ( publicData.sandBox ) {
-        publicData.apiUrl = `https://f69d-2405-8d40-cf0-94c1-a156-7cb4-f13c-380d.ngrok.io/${tail}`
+      if ( publicData.devMode ) {
+        publicData.apiUrl = `https://2088-2405-8d40-cf0-94c1-d09e-f734-1088-dfc6.ngrok.io/${tail}`
       } else {
         publicData.apiUrl = `https://advancediagnostics.herokuapp.com/${tail}`
       }
@@ -93,16 +93,29 @@
         },
         body: JSON.stringify( { id:id  } )
       } ).then( r => r.json() ).then( res => {
-        console.log( res )
         config.closeLoading()
-        const status = res.data.api_status
-        const message = res.data.api_message
+        const title = 'Business ID Verification'
 
-        Swal.fire({
-          icon: 'info',
-          title: 'Sandbox: API Request',
-          text: `Status: ${status} -- Message: ${message}`
-        })
+        if ( res.success ) {
+          const status = res.data.api_status
+          const message = res.data.api_message
+          const fire = {
+            icon: status == 200 ? 'success' : 'info',
+            text: message
+          }
+
+          if ( status !== 200 ) fire['title'] = title
+          if ( status == 200 ) window.location.href = '/checkout'
+
+          Swal.fire( fire )
+
+        } else {
+          Swal.fire({
+            icon: 'warning',
+            title: title,
+            text: res.message
+          })
+        }
       } )
     },
 

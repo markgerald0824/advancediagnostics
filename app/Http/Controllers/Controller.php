@@ -12,18 +12,45 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    /**
+     * @description Get the External API keys
+     */
+    public function getBearer() {
+        $mode = config( 'external_api.env' );
+        $bearer = ( $mode == 'live' ) ? config( 'external_api.bearer_live' ) : config( 'external_api.bearer_local' );
+        \Log::info( "Mode: {$mode} -- Bearer: {$bearer}" );
+
+        return $bearer;
+    }
+
+    /**
+     * @description Get the External Host
+     */
+    public function getHost() {
+        $mode = config( 'external_api.host' );
+        $host = ( $mode == 'live' ) ? config( 'external_api.host_live' ) : config( 'external_api.host_local' );
+        \Log::info( "Mode: {$mode} -- Host: {$host}" );
+
+        return $host;
+    }
+
+    /**
+     * @description Initialize the HTTP request to external IP
+     */
     public function http( $type = "GET", $url = "", $data = [] ) {
-        $request = Http::withHeaders([
-            'Authorization' => 'Bearer c2b647092cbb6f3ba01f0bc66b42f502'
-        ]);
+        try {
+            \Log::info( "URL: {$url}" );
+            $request = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->getBearer()
+            ]);
+            $request = ( $type == "GET" ) ? $request->get( $url ) : $request->post( $url, $data );
+            return $request;
 
-        if ( $type == "GET" ) {
-            $request = $request->get( $url );
+        } catch ( \Exception $e ) {
+            \Log::error( $e->getMessage() );
+            \Log::error( $e->getTraceAsString() );
 
-        } else {
-            $request = $request->post( $url, $data );
+            return false;
         }
-
-        return $request;
     }
 }
