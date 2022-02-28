@@ -101,10 +101,10 @@
           const message = res.data.api_message
           const fire = {
             icon: status == 200 ? 'success' : 'info',
+            title: title,
             text: message
           }
 
-          if ( status !== 200 ) fire['title'] = title
           if ( status == 200 ) window.location.href = '/checkout'
 
           Swal.fire( fire )
