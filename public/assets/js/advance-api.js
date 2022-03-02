@@ -1,6 +1,6 @@
 ( function( $ ) {
   const publicData = {
-    devMode: true,
+    devMode: false,
     apiUrl: "",
     fileName: "advance-api.js",
     businessVerified: false,
@@ -74,7 +74,8 @@
         return false
 
       } else {
-        config.validateId( idValue )
+        const isValid = config.isValid( idValue )
+        if ( isValid ) config.validateId( idValue )
       }
     },
 
@@ -127,6 +128,33 @@
 
       if ( pathname == '/cart' ) return true
       return false
+    },
+
+    /**
+     * @description Check if ID is valid
+     * @param {@d} value Value to validate
+     */
+    isValid: function( value ) {
+      const regex = /^[0-9]+$/
+      const numbersOnly = value.match( regex )
+
+      if ( value.length < 12 ) {
+        Swal.fire({
+          icon: 'info',
+          title: 'Business ID must be exactly 12 numbers'
+        })
+        return false
+      }
+      
+      if ( ! numbersOnly ) {
+        Swal.fire({
+          icon: 'info',
+          title: 'Business ID must be numbers only'
+        })
+        return false
+      }
+
+      return numbersOnly
     },
 
     /**

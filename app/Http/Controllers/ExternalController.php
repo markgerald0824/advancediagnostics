@@ -9,7 +9,7 @@ class ExternalController extends Controller
     public function validateId( Request $request ) {
         try {
             $url = "{$this->getHost()}/entities/{$request->id}";
-            $validate = json_decode( $this->http( "GET", $url ) );
+            $validate = $this->http( "GET", $url );
 
             if ( ! $validate ) {
                 return response()->json([
@@ -20,12 +20,12 @@ class ExternalController extends Controller
 
             $status = null;
 
-            if ( isset( $validate->nzbn ) ) {
+            if ( isset( $validate['nzbn'] ) ) {
                 $status = 200;
                 $message = "NZBN Business Number has been verified.";
             } else {
-                $status = $validate->status;
-                $message = ( $status == 400 ) ? $validate->errorDescription : "NZBN Number Found!";
+                $status = $validate['status'];
+                $message = ( $status == 400 ) ? $validate['errorDescription'] : "NZBN Number Found!";
             }
             
 
